@@ -1,0 +1,22 @@
+name: FAAH
+options:
+  bundleIdPrefix: com.faah
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  FAAH:
+    type: application
+    platform: iOS
+    sources:
+      - FAAH
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.faah.soundboard
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: FAAH
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
