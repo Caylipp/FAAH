@@ -13,7 +13,9 @@ from .state import State
 log = logging.getLogger(__name__)
 MAX_DETAILS_PER_RUN = 45
 MAX_PUSHES_PER_RUN = 5
-SOURCE_ALERT_AFTER = 6          # aufeinanderfolgende Fehlläufe (≈ 3 Stunden), bevor eine Quelle gemeldet wird
+SOURCE_ALERT_AFTER = 6          # aufeinanderfolgende Fehlversuche, bevor eine Quelle gemeldet wird
+BACKOFF_AFTER = 2               # ab so vielen Fehlversuchen in Folge wird die Quelle seltener versucht …
+BACKOFF_EVERY = 4               # … nur noch jeden 4. Lauf (≈ alle 2 Stunden), spart Actions-Minuten
 
 
 class Runner:
@@ -110,6 +112,12 @@ class Runner:
             scfg = self.cfg["sources"].get(name, {})
             if not scfg.get("enabled", True) or name in off:
                 continue
+            err = self.state.errors.get(name, {})
+            if err.get("count", 0) >= BACKOFF_AFTER:
+                err["skipped"] = err.get("skipped", 0) + 1
+                if err["skipped"] % BACKOFF_EVERY:
+                    log.info("Quelle %s ausgelassen (gestört, nächster Versuch später)", name)
+                    continue
             try:
                 found = mod.search(scfg, self.cfg["home"])
             except Exception as e:   # eine kaputte Quelle darf den Lauf nicht stoppen

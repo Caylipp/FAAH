@@ -19,7 +19,8 @@ def session() -> requests.Session:
 
 
 def get(url: str, *, params: dict | None = None, headers: dict | None = None,
-        timeout: int = 20) -> requests.Response:
+        timeout: int = 15) -> requests.Response:
+    """Bei Timeout kein zweiter Versuch: ein blockierendes Portal würde sonst Actions-Minuten fressen."""
     for attempt in (1, 2):
         try:
             resp = session().get(url, params=params, headers=headers, timeout=timeout)
@@ -30,7 +31,9 @@ def get(url: str, *, params: dict | None = None, headers: dict | None = None,
             if "charset" not in resp.headers.get("content-type", "").lower():
                 resp.encoding = "utf-8"     # sonst rät requests ISO-8859-1 und Umlaute zerfallen
             return resp
-        except (requests.ConnectionError, requests.Timeout):
+        except requests.Timeout:
+            raise
+        except requests.ConnectionError:
             if attempt == 2:
                 raise
             time.sleep(3)
