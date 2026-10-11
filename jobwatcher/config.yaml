@@ -1,0 +1,63 @@
+# Job-Watcher: Was gesucht wird und was ein guter Job ist.
+# Änderungen hier wirken beim nächsten Lauf (GitHub Actions liest immer den aktuellen Stand von main).
+
+home:
+  name: Dreieich
+  lat: 50.0186
+  lon: 8.6948
+  radius_km: 40            # weiter entfernte Jobs fallen raus
+
+# Wann du Zeit hast (Ortszeit). Fließt in die Regel-Bewertung und in den KI-Prompt ein.
+availability:
+  text: >-
+    Samstag frei bis ca. 14:00 Uhr (ab 15:00 Uhr Minijob bei Flaschenpost bis 21:30 Uhr).
+    Sonntag ganztägig frei. Montag bis Freitag nur ungern und nur ab 17:30 Uhr.
+    Am liebsten Einsätze am Wochenende, vor allem sonntags oder Samstagvormittag.
+
+profile:
+  age: 24
+  license_years: 5      # Führerschein B seit
+  text: >-
+    24 Jahre, Führerschein Klasse B seit 5 Jahren (seit 19), eigenes Auto, wohnt in Dreieich.
+    Kein Deutschlandticket (würde eins kaufen, falls nötig). Kein Lkw-, Bus- oder Personenbeförderungsschein.
+    Sucht NUR Minijobs (geringfügig, bis 603 €/Monat, steuerfrei). Keine Selbstständigkeit, kein Gewerbe,
+    keine Werkstudenten-Stellen (kein Student). Bevorzugt Fahrzeugüberführungen, offen für andere gute Minijobs.
+
+# Ab welcher Bewertung (0–10) es Pushes gibt. Per Handy änderbar: "schwelle 7".
+scoring:
+  push_min: 7.0            # Einzel-Push (ntfy-Priorität 4)
+  top_min: 8.5             # dringender Push (Priorität 5), kommt auch nachts
+  digest_min: 5.0          # landet in der Tageszusammenfassung
+  min_wage: 13.90          # gesetzlicher Mindestlohn 2026 (2027: 14,60)
+
+quiet_hours:               # nur Top-Treffer stören in dieser Zeit
+  start: 22
+  end: 7
+
+digest_hour: 18            # Tageszusammenfassung um 18 Uhr (nur wenn es etwas gibt)
+heartbeat_weekday: 6       # 0=Mo … 6=So: wöchentliches Lebenszeichen
+heartbeat_hour: 10
+
+ai:
+  # Gemini (kostenloser Key aus https://aistudio.google.com). Ohne Key: nur Regeln.
+  models: [gemini-flash-latest, gemini-2.5-flash, gemini-flash-lite-latest]
+  max_jobs_per_run: 40     # schont das Gratis-Kontingent
+  min_rule_score: 3.0      # nur Kandidaten ab dieser Regel-Bewertung bekommen eine KI-Bewertung
+
+sources:
+  ba:                      # Jobbörse der Bundesagentur für Arbeit (offizielle API, Minijob-Filter)
+    enabled: true
+    queries: [Fahrer, Überführung, Überführungsfahrer, Fahrzeug, Kurier, Autovermietung, Autohaus, ""]
+  stepstone:
+    enabled: true
+    queries: [minijob-fahrer, fahrzeugueberfuehrung, ueberfuehrungsfahrer, minijob-wochenende, aushilfe-fahrer]
+  linkedin:
+    enabled: true
+    queries: [Minijob Fahrer, Überführungsfahrer, Fahrzeugüberführung, Minijob Wochenende, Aushilfe Fahrer]
+  kleinanzeigen:
+    enabled: true
+    location_id: 4290      # Dreieich
+    queries: [fahrer minijob, überführung, überführungsfahrer, minijob wochenende, aushilfe fahrer]
+  xing:
+    enabled: true
+    queries: [Minijob Fahrer, Überführungsfahrer, Fahrzeugüberführung, Minijob Wochenende]

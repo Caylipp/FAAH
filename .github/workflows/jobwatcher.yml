@@ -1,0 +1,86 @@
+name: Job-Watcher
+
+on:
+  schedule:
+    # Zeiten in UTC. :07 und :37 statt :00, weil GitHub zur vollen Stunde oft verspätet startet.
+    # 05–20 UTC = 06/07–21/22 Uhr deutscher Zeit, alle 30 Min. (32 Läufe) + 1 Nachtlauf.
+    # ≈ 33 Läufe × 1 Min. × 31 Tage ≈ 1.020 von 2.000 Freiminuten im Monat.
+    - cron: "7,37 5-20 * * *"
+    - cron: "7 1 * * *"
+  workflow_dispatch:        # "Run workflow" in der GitHub-App = sofort prüfen
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jobwatcher
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: jobwatcher
+
+      - name: Repo privat?
+        id: guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          private=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/${GITHUB_REPOSITORY}" \
+                    | python3 -c "import json,sys; print(str(json.load(sys.stdin).get('private', False)).lower())" || echo unknown)
+          echo "private=$private" >> "$GITHUB_OUTPUT"
+          if [ "$private" != "true" ]; then
+            echo "::warning::Repo ist nicht privat ($private). Trockenlauf: keine Pushes, kein State-Branch."
+          fi
+
+      - name: State-Branch holen
+        run: |
+          mkdir state
+          if git fetch -q --depth 1 origin jobwatcher-state 2>/dev/null; then
+            git archive FETCH_HEAD | tar -x -C state
+            echo "State geladen: $(ls state | tr '\n' ' ')"
+          else
+            echo "Noch kein State-Branch – erster Lauf."
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: jobwatcher/requirements.txt
+
+      - run: pip install -q -r jobwatcher/requirements.txt
+
+      - name: Jobs suchen
+        working-directory: jobwatcher
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_CONTROL_TOPIC: ${{ secrets.NTFY_CONTROL_TOPIC }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          REPORT_URL: https://github.com/${{ github.repository }}/blob/jobwatcher-state/TREFFER.md
+        run: |
+          if [ "${{ steps.guard.outputs.private }}" = "true" ]; then
+            python -m jobwatcher run --state-dir ../state
+          else
+            python -m jobwatcher run --state-dir ../state --dry
+          fi
+
+      - name: State speichern
+        if: always() && steps.guard.outputs.private == 'true'
+        working-directory: state
+        run: |
+          [ -f state.json ] || exit 0
+          # Immer genau ein Commit: der Branch wächst nicht mit jedem Lauf.
+          git init -q -b jobwatcher-state tmp-repo
+          cp -r ./*.json ./*.md tmp-repo/ 2>/dev/null || true
+          [ -f last_error.txt ] && cp last_error.txt tmp-repo/
+          cd tmp-repo
+          git add -A
+          git -c user.name="jobwatcher" -c user.email="jobwatcher@users.noreply.github.com" \
+              commit -q -m "State $(date -u +%FT%TZ)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" \
+              HEAD:jobwatcher-state

@@ -1,0 +1,103 @@
+{
+ "ergebnisliste": [
+  {
+   "stellenangebotsart": "ARBEIT",
+   "stellenangebotsTitel": "Werkstudent (M/W/D) Fahrer für Fahrzeug-Überführung",
+   "quereinstiegGeeignet": true,
+   "arbeitszeitSchichtNachtWochenende": false,
+   "arbeitszeitTeilzeitAbend": false,
+   "arbeitszeitTeilzeitNachmittag": false,
+   "arbeitszeitTeilzeitVormittag": false,
+   "arbeitszeitTeilzeitFlexibel": false,
+   "arbeitszeitVollzeit": false,
+   "eintrittszeitraum": {
+    "von": "2026-09-04"
+   },
+   "verguetungsangabe": "STUNDENLOHN",
+   "artDerVerguetung": "FESTGEHALT",
+   "festgehalt": 13.9,
+   "vertragsdauer": "KEINE_ANGABE",
+   "istGeringfuegigeBeschaeftigung": true,
+   "stellenlokationen": [
+    {
+     "adresse": {
+      "strasse": "Niddastraße",
+      "hausnummer": "74",
+      "plz": "60329",
+      "ort": "Frankfurt am Main",
+      "region": "HESSEN",
+      "land": "DEUTSCHLAND"
+     },
+     "breite": 50.1085516,
+     "laenge": 8.6609644
+    }
+   ],
+   "veroeffentlichungszeitraum": {
+    "von": "2026-09-03"
+   },
+   "datumErsteVeroeffentlichung": "2026-09-03",
+   "aenderungsdatum": "2026-09-04T06:46:00.305",
+   "hauptberuf": "Auslieferungsfahrer/in (nicht Verkaufsfahrer/in)",
+   "alternativBeruf1": "Berufskraftfahrer/in",
+   "alternativBeruf2": "Fahrzeugpfleger/in",
+   "firma": "Logiston GmbH",
+   "arbeitgeberKundennummerHash": "xUQ8mUlTs4GM2-_hOOM9qZuyhd0boeJ4W7g77FG-Vv0=",
+   "referenznummer": "10001-1003648922-S",
+   "entfernung": 12,
+   "alleBerufe": [
+    "Auslieferungsfahrer/in (nicht Verkaufsfahrer/in)",
+    "Berufskraftfahrer/in",
+    "Fahrzeugpfleger/in"
+   ]
+  },
+  {
+   "stellenangebotsart": "ARBEIT",
+   "stellenangebotsTitel": "Werkstudent (M/W/D) Fahrer für Fahrzeug-Überführung",
+   "quereinstiegGeeignet": true,
+   "arbeitszeitSchichtNachtWochenende": false,
+   "arbeitszeitTeilzeitAbend": false,
+   "arbeitszeitTeilzeitNachmittag": false,
+   "arbeitszeitTeilzeitVormittag": false,
+   "arbeitszeitTeilzeitFlexibel": false,
+   "arbeitszeitVollzeit": false,
+   "eintrittszeitraum": {
+    "von": "2026-07-28"
+   },
+   "verguetungsangabe": "STUNDENLOHN",
+   "artDerVerguetung": "FESTGEHALT",
+   "festgehalt": 13.9,
+   "vertragsdauer": "KEINE_ANGABE",
+   "istGeringfuegigeBeschaeftigung": true,
+   "stellenlokationen": [
+    {
+     "adresse": {
+      "plz": "60549",
+      "ort": "Frankfurt am Main",
+      "region": "HESSEN",
+      "land": "DEUTSCHLAND"
+     },
+     "breite": 50.0433798,
+     "laenge": 8.56603
+    }
+   ],
+   "veroeffentlichungszeitraum": {
+    "von": "2026-07-21"
+   },
+   "datumErsteVeroeffentlichung": "2026-07-21",
+   "aenderungsdatum": "2026-07-28T09:08:55.477",
+   "hauptberuf": "Auslieferungsfahrer/in (nicht Verkaufsfahrer/in)",
+   "alternativBeruf1": "Berufskraftfahrer/in",
+   "alternativBeruf2": "Fahrzeugpfleger/in",
+   "firma": "Logiston GmbH",
+   "arbeitgeberKundennummerHash": "xUQ8mUlTs4GM2-_hOOM9qZuyhd0boeJ4W7g77FG-Vv0=",
+   "referenznummer": "10001-1003418645-S",
+   "entfernung": 11,
+   "alleBerufe": [
+    "Auslieferungsfahrer/in (nicht Verkaufsfahrer/in)",
+    "Berufskraftfahrer/in",
+    "Fahrzeugpfleger/in"
+   ]
+  }
+ ],
+ "maxErgebnisse": 2
+}
