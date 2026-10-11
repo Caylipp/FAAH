@@ -89,12 +89,25 @@ def test_source_failure_alert_after_six_runs(env):
     run(tmp)
     src.fail = True
     notify.SENT.clear()
-    for _ in range(6):
+    for _ in range(2 + 4 * 4):                 # 2 Fehlversuche, danach nur jeder 4. Lauf
         run(tmp)
     assert [m["title"] for m in notify.SENT] == ["⚠️ Quelle ba gestört"]
     src.fail = False
-    run(tmp)
+    for _ in range(4):
+        run(tmp)
     assert notify.SENT[-1]["title"] == "✅ Quelle ba läuft wieder"
+
+
+def test_backoff_skips_broken_source(env):
+    src, tmp = env
+    run(tmp)
+    src.fail = True
+    calls = []
+    orig = src.search
+    src.search = lambda c, h: calls.append(1) or orig(c, h)
+    for _ in range(10):
+        run(tmp)
+    assert len(calls) == 2 + 2                 # 2 Versuche, dann Lauf 4 und 8 der Pause
 
 
 def test_commands(env, monkeypatch):
