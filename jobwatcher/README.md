@@ -30,7 +30,7 @@ flowchart LR
 | Quelle | Zugriff | Bemerkung |
 |---|---|---|
 | Arbeitsagentur | offizielle REST-API (`pc/v6/jobs`, Filter `arbeitszeit=mj`) | beste Quelle: sicher Minijob, Entfernung, Lohn |
-| StepStone | JSON im Seitenquelltext | |
+| StepStone | JSON im Seitenquelltext | nur bei lokalen Läufen: StepStone blockt GitHub-Server (Timeout) |
 | LinkedIn | öffentliche Gast-Suche, kein Login | |
 | Kleinanzeigen | Kategorie Jobs, Umkreis Dreieich | Gesuche werden übersprungen |
 | Xing | JSON im Seitenquelltext, kein Login | |

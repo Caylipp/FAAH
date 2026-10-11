@@ -1,5 +1,6 @@
 """Ein Lauf: Befehle abholen → Quellen abfragen → bewerten → melden → Zustand und Trefferliste schreiben."""
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -111,6 +112,8 @@ class Runner:
         for name, mod in SOURCES.items():
             scfg = self.cfg["sources"].get(name, {})
             if not scfg.get("enabled", True) or name in off:
+                continue
+            if scfg.get("actions") is False and os.environ.get("GITHUB_ACTIONS") == "true":
                 continue
             err = self.state.errors.get(name, {})
             if err.get("count", 0) >= BACKOFF_AFTER:
