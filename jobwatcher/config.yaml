@@ -50,6 +50,7 @@ sources:
     queries: [Fahrer, Überführung, Überführungsfahrer, Fahrzeug, Kurier, Autovermietung, Autohaus, ""]
   stepstone:
     enabled: true
+    actions: false         # StepStone blockt GitHub-Server (Timeout). Lokal auf dem Mac funktioniert es.
     queries: [minijob-fahrer, fahrzeugueberfuehrung, ueberfuehrungsfahrer, minijob-wochenende, aushilfe-fahrer]
   linkedin:
     enabled: true
